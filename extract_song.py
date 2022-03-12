@@ -5,6 +5,7 @@ import librosa
 from spleeter.separator import Separator
 import shutil
 import pandas as pd
+import gc
 
 def get_bpm(filepath):
     y, sr = librosa.load(filepath)
@@ -41,12 +42,16 @@ def extracting(audio,filename,mood):
     for i in range(len(audio_list)):
         audio_list[i].export("extract/"+str(mood) + "/" + str(filename.split(".")[0]) + "_"+ str(i) + '.wav', format="wav")
         data.append([str(filename.split(".")[0]) + "_"+ str(i) + '.wav',mood])
+    del audio_list
+    gc.collect()
     return data
 
 def extract_instrumental(separator,audio,name):
     separator.separate_to_file(audio, 'instrumental/')
     os.rename('instrumental/'+name.split('.')[0]+'/accompaniment.wav', 'instrumental/'+name)
     shutil.rmtree('instrumental/'+name.split(".")[0])
+    del audio
+    gc.collect()
 
 
 if __name__ == '__main__':
@@ -55,21 +60,24 @@ if __name__ == '__main__':
         os.mkdir('extract')
     except:
         pass
-    try:
-        os.mkdir("instrumental")
-    except:
-        pass
+    
     separator = Separator('spleeter:2stems')
     data = []
+    count = 0
     for mood in mood_list:
+        try:
+            os.mkdir("instrumental")
+        except:
+            pass
         song_list = os.listdir("song/"+mood)
         for song in song_list:
             extract_instrumental(separator,"song/"+mood+"/"+song,song)
             audio = AudioSegment.from_wav("instrumental/"+song)
             audio = preprocessing(audio)
             data += extracting(audio,song,mood)
-            print("Extracting "+song+" done")
+            count += 1
+            print("Extracting "+song+" done"+" ("+str(count)+"/"+str(len(mood_list) * len(song_list))+")")
+        shutil.rmtree('instrumental')
     print("Extracting done")
-    shutil.rmtree('instrumental')
     df = pd.DataFrame(data,columns=['filename','mood'])
     df.to_csv('data.csv',index=False)
