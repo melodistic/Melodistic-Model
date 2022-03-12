@@ -4,6 +4,7 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import gc
 
 def scale_minmax(X, min=0.0, max=1.0):
     X_std = (X - X.min()) / (X.max() - X.min())
@@ -17,12 +18,16 @@ def save_image(data,filename,mood):
     im = Image.fromarray(img)
     im = im.resize((256,256))
     im.save("spectogram/"+ mood +'/'+ filename)
+    del img, im
+    gc.collect()
 
 def convert_audio_to_mel_spectogram(filename,mood):
     x, sr = librosa.load(filename)
     S = librosa.feature.melspectrogram(x, sr=sr, n_mels=256)
     mels = np.log(S + 1e-9)
     save_image(mels,filename.split("/")[-1].split('.')[0] + '.png',mood)
+    del x, sr, S, mels
+    gc.collect()
     
 
 if __name__ == '__main__':
