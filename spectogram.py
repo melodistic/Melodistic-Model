@@ -16,7 +16,7 @@ def save_image(data,filename,mood):
     img = np.flip(img, axis=0) # put low frequencies at the bottom in image
     img = 255-img
     im = Image.fromarray(img)
-    im = im.resize((256,256))
+    im = im.resize((224,224))
     im.save("spectogram/"+ mood +'/'+ filename)
     del img, im
     gc.collect()
