@@ -6,3 +6,4 @@ spectogram
 pretrained_models
 data.csv
 models/
+split_data
