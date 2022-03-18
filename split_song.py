@@ -1,13 +1,19 @@
 import pandas as pd
 from pydub import AudioSegment
-original_song = "song/Anxious/dark-piano.wav"
-data = list(map(lambda x: x.strip(),open('split_data','r').read().split('\n')))
+original_song = "song/Sad/sad-song.wav"
+data = list(map(lambda x: x.strip(),open('split_data/sad_song','r').read().split('\n')))
 split_list = []
 for i in range(len(data)):
-    split_list.append({
-        "name": data[i][6:],
-        "start_time": data[i][:5],
-    })
+    if len(data[i].split(":")) == 2:
+        split_list.append({
+            "name": data[i][6:],
+            "start_time": data[i][:5],
+        })
+    elif len(data[i].split(":")) == 3:
+        split_list.append({
+            "name": data[i][8:],
+            "start_time": data[i][:7],
+        })
 for i in range(len(split_list) - 1):
     split_list[i]["end_time"] = split_list[i + 1]["start_time"]
 split_list[len(split_list) - 1]["end_time"] = "NONE"
