@@ -41,7 +41,8 @@ def extracting(audio,filename,mood):
     data = []
     for i in range(len(audio_list)):
         audio_list[i].export("extract/"+str(mood) + "/" + str(filename.split(".")[0]) + "_"+ str(i) + '.wav', format="wav")
-        data.append([str(filename.split(".")[0]) + "_"+ str(i) + '.wav',mood])
+        bpm = get_bpm("extract/"+str(mood) + "/" + str(filename.split(".")[0]) + "_"+ str(i) + '.wav')
+        data.append([str(filename.split(".")[0]) + "_"+ str(i) + '.wav', mood, bpm])
     del audio_list
     gc.collect()
     return data
@@ -79,5 +80,5 @@ if __name__ == '__main__':
             print("Extracting "+song+" done"+" ("+str(count)+"/"+str(len(mood_list) * len(song_list))+")")
         shutil.rmtree('instrumental')
     print("Extracting done")
-    df = pd.DataFrame(data,columns=['filename','mood'])
+    df = pd.DataFrame(data,columns=['filename','mood','bpm'])
     df.to_csv('data.csv',index=False)
