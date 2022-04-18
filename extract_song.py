@@ -10,6 +10,8 @@ import gc
 def get_bpm(filepath):
     y, sr = librosa.load(filepath)
     tempo, _ = librosa.beat.beat_track(y,sr)
+    del y, sr
+    gc.collect()
     return tempo
 
 def detect_leading_silence(sound, chunk_size=10):
@@ -25,7 +27,10 @@ def preprocessing(audio):
     start_trim = detect_leading_silence(audio)
     end_trim = detect_leading_silence(audio.reverse())
     duration = len(audio)
-    return audio[start_trim:duration-end_trim]
+    trimmed_sound = audio[start_trim:duration-end_trim]
+    del audio
+    gc.collect()
+    return trimmed_sound
 
 def extracting(audio,filename,mood):
     size = len(audio)
