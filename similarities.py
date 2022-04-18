@@ -71,7 +71,7 @@ def combine_all(audio):
         combined = combine(combined, part)
     return combined
 
-def create_list_of_song(mood, n = 5):
+def create_list_of_song(mood, n = 1):
     current_song = np.random.choice(list(map(lambda x: f"extract/{mood}/" + x,os.listdir(f"extract/{mood}"))),size = 1)[0]
     song_list = [current_song]
     for _ in range(n):
