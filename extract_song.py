@@ -31,9 +31,10 @@ def extracting(audio,filename,mood):
     size = len(audio)
     time_30_sec = 30 * 1000
     audio_list = []
-    for i in range(0, size, time_30_sec):
-        if i + time_30_sec <= size:
-            audio_list.append(audio[i:i+time_30_sec])
+    for i in range(10):
+        start = random.randint(0,size-time_30_sec)
+        end = start + time_30_sec
+        audio_list.append(audio[start:end])
     try:
         os.mkdir('extract/'+str(mood))
     except:
@@ -76,6 +77,8 @@ if __name__ == '__main__':
             audio = AudioSegment.from_wav("instrumental/"+song)
             audio = preprocessing(audio)
             data += extracting(audio,song,mood)
+            del audio
+            gc.collect()
             count += 1
             print("Extracting "+song+" done"+" ("+str(count)+"/"+str(len(mood_list) * len(song_list))+")")
         shutil.rmtree('instrumental')
