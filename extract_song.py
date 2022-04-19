@@ -36,7 +36,7 @@ def extracting(audio,filename,mood):
     size = len(audio)
     time_30_sec = 30 * 1000
     audio_list = []
-    for i in range(10):
+    for i in range(20):
         start = random.randint(0,size-time_30_sec)
         end = start + time_30_sec
         audio_list.append(audio[start:end])

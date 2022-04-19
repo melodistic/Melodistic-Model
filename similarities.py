@@ -83,4 +83,4 @@ def create_list_of_song(mood, n = 1):
     combined = postprocessing(combined, 300)
     combined.export("combined.wav", format="wav")
 
-create_list_of_song("Chill")
+create_list_of_song("Romance")
