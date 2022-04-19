@@ -49,13 +49,10 @@ def extract_instrumental(separator,audio,name):
     separator.separate_to_file(audio, 'instrumental/')
     os.rename('instrumental/'+name.split('.')[0]+'/accompaniment.wav', 'instrumental/'+name)
     shutil.rmtree('instrumental/'+name.split(".")[0])
-    del audio
-    gc.collect()
 
 
 if __name__ == '__main__':
-    # mood_list = os.listdir("song/")
-    mood_list = ["Anxious"]
+    mood_list = os.listdir("song/")
     try:
         os.mkdir('extract')
     except:
