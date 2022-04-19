@@ -26,7 +26,7 @@ def find_most_similar_songs(current_song, mood, existed_songs):
    
     return max_song
 
-def create_list_of_song(mood, n = 10):
+def create_list_of_song(mood, n = 60):
     current_song = np.random.choice(data,size = 1)[0]
     song_list = [current_song["name"]]
     for _ in range(n):

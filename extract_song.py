@@ -7,13 +7,6 @@ import shutil
 import pandas as pd
 import gc
 
-def get_bpm(filepath):
-    y, sr = librosa.load(filepath)
-    tempo, _ = librosa.beat.beat_track(y,sr)
-    del y, sr
-    gc.collect()
-    return tempo
-
 def detect_leading_silence(sound, chunk_size=10):
     silence_threshold = sound.dBFS * 1.5
     trim_ms = 0 
@@ -47,8 +40,7 @@ def extracting(audio,filename,mood):
     data = []
     for i in range(len(audio_list)):
         audio_list[i].export("extract/"+str(mood) + "/" + str(filename.split(".")[0]) + "_"+ str(i) + '.wav', format="wav")
-        bpm = get_bpm("extract/"+str(mood) + "/" + str(filename.split(".")[0]) + "_"+ str(i) + '.wav')
-        data.append([str(filename.split(".")[0]) + "_"+ str(i) + '.wav', mood, bpm])
+        data.append([str(filename.split(".")[0]) + "_"+ str(i) + '.wav', mood])
     del audio_list
     gc.collect()
     return data
@@ -62,7 +54,8 @@ def extract_instrumental(separator,audio,name):
 
 
 if __name__ == '__main__':
-    mood_list = os.listdir("song/")
+    # mood_list = os.listdir("song/")
+    mood_list = ["Anxious"]
     try:
         os.mkdir('extract')
     except:
@@ -88,5 +81,5 @@ if __name__ == '__main__':
             print("Extracting "+song+" done"+" ("+str(count)+"/"+str(len(mood_list) * len(song_list))+")")
         shutil.rmtree('instrumental')
     print("Extracting done")
-    df = pd.DataFrame(data,columns=['filename','mood','bpm'])
+    df = pd.DataFrame(data,columns=['filename','mood'])
     df.to_csv('data.csv',index=False)
