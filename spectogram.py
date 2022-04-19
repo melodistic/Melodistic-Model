@@ -33,9 +33,15 @@ def convert_audio_to_mel_spectogram(filename,mood):
 if __name__ == '__main__':
     os.makedirs("spectogram",exist_ok=True)
     mood_lists = os.listdir("extract")
+    all = 0
+    count = 0
+    for mood in mood_lists:
+        files = os.listdir("extract/"+mood)
+        all += len(files)
     for mood in mood_lists:
         os.makedirs("spectogram/"+mood,exist_ok=True)
         for filename in os.listdir("extract/"+mood):
             convert_audio_to_mel_spectogram("extract/"+mood+"/"+filename,mood)
-            print("Done " + filename)
+            count += 1
+            print("Progress:", str(count) + "/" + str(all))
     
