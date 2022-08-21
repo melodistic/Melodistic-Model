@@ -12,6 +12,7 @@ import gc
 import tensorflow as tf
 import numpy as np
 import json
+import pandas as pd
 def get_bpm(path):
     path = 'extract/' + path + '.wav'
     y, sr = librosa.load(path)
@@ -33,15 +34,23 @@ def processing(filenames,moods,pred_feats,start,end,pid):
             print(filename + " Wrong prediction: " + mood + ", it should be "+ actual_mood)
             mood = actual_mood
             wrong += 1
+        music_name = filename.split("/")[1].split('.')[0]
         data.append({
-            "name":filename,
+            "music_name": music_name,
+            "music_path": "song/" + filename.split(".")[0] + ".wav",
+            "music_feature_path": "features/" + music_name + ".json",
             "bpm":bpm,
             "mood":mood,
-            "features":features})
+            "is_system": True
+        })
+        with open("features/" + music_name + ".json", 'w') as f:
+            json.dump(features, f)
+            f.close()
         count+=1
         print("Process ",pid,str(count)+"/"+str(end-start))
-    print("Process ",pid," finished Accuracy: ",str(100*(count-wrong)/count),"%") 
-    json.dump(data,open(f"{mood}.json","w"))
+    print("Process ",pid," finished Accuracy: ",str(100*(count-wrong)/count),"%")
+    df = pd.DataFrame(data)
+    df.to_csv(str(pid) + ".csv", index=False, header=True)
 if __name__ == "__main__":
     mood_list = os.listdir("spectogram")
     process_list = []
