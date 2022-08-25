@@ -9,3 +9,5 @@ models/
 split_data
 melodistic-project
 features
+csv_data
+music.csv

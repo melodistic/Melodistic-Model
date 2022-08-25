@@ -50,11 +50,11 @@ def processing(filenames,moods,pred_feats,start,end,pid):
         print("Process ",pid,str(count)+"/"+str(end-start))
     print("Process ",pid," finished Accuracy: ",str(100*(count-wrong)/count),"%")
     df = pd.DataFrame(data)
-    df.to_csv(str(pid) + ".csv", index=False, header=True)
+    df.to_csv("csv_data/" +str(pid) + ".csv", index=False, header=True)
 if __name__ == "__main__":
     mood_list = os.listdir("spectogram")
     process_list = []
-    model_path = 'models/model_v1.h5'
+    model_path = 'models/model.h5'
     model = load_model(model_path)
 
     test_image_generator = ImageDataGenerator(rescale=1./255)
