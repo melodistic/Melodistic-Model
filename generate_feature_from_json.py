@@ -17,6 +17,6 @@ for mood in mood_list:
         for song in songs.itertuples():
             with open(song[3], "r") as f:
                 data = json.load(f)
-                new_df.append([song[1],*data])
-        new_df = pd.DataFrame(new_df, columns=["music_name", *["feature_"+str(i) for i in range(1280)]])
+                new_df.append([song[2],*data])
+        new_df = pd.DataFrame(new_df, columns=["music_path", *["feature_"+str(i) for i in range(1280)]])
         new_df.to_csv(f"csv_features/{mood}-{bpm_mode}.csv", index=False)
